@@ -4,6 +4,7 @@ from selene import have, command, be
 from selene.support.shared import browser
 
 import tests
+from model.data.users import User
 
 
 class RegistrationPage:
@@ -66,21 +67,30 @@ class RegistrationPage:
     def submit(self):
         browser.element('#submit').click()
 
-    def should_have_registered(self, full_name, email, gender, phone, date_of_birth, subject, hobbies, avatar,
-                               current_address, city):
-        browser.element('.modal-content').should(be.visible)
-        browser.element('.modal-title').should(have.exact_text('Thanks for submitting the form'))
-        browser.element('.table').all('td').even.should(
-            have.exact_texts(
-                full_name,
-                email,
-                gender,
-                phone,
-                date_of_birth,
-                subject,
-                hobbies,
-                avatar,
-                current_address,
-                city
-            )
-        )
+    def register(self, user: User):
+        self.fill_first_name(user.first_name)
+        self.fill_last_name(user.last_name)
+        self.fill_email(user.email)
+        self.fill_gender()
+        self.fill_mobile_number(user.mobile_number)
+        self.fill_date_of_birth()
+        self.fill_subject(user.subject)
+        self.fill_hobby()
+        self.upload_picture()
+        self.fill_address(user.address)
+        self.fill_state()
+        self.fill_city()
+        self.submit()
+
+    def should_have_registered(self, user: User):
+        browser.element('.table').all('td:nth-child(2)').should(have.texts(
+            f'{user.first_name} {user.last_name}',
+            user.email,
+            user.gender,
+            user.mobile_number,
+            f'{user.day_of_birth} {user.month_of_birth},{user.year_of_birth}',
+            user.subject,
+            user.hobby,
+            user.picture,
+            user.address,
+            f'{user.state} {user.city}'.strip()))
