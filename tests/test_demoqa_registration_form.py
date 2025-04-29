@@ -13,7 +13,6 @@ def test_demoqa_registration_form():
     registration_page.fill_email('MIvanova@yandex.ru')
     registration_page.fill_gender()
     registration_page.fill_mobile_number('5648765439')
-    # registration_page.fill_date_of_birth(1987, 1, 22)
     registration_page.fill_date_of_birth()
     registration_page.fill_subject('History')
     registration_page.fill_hobby()
